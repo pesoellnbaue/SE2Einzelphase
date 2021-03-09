@@ -6,24 +6,23 @@ import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
-public class NetworkThread extends Thread{
+//Peter Söllnbauer, 11904589
+
+public class NetworkThread extends Thread {
 
     String matNo;
     String result;
 
-    NetworkThread(String matNo)
-    {
+    NetworkThread(String matNo) {
         this.matNo = matNo;
     }
 
-    public void run()
-    {
+    public void run() {
         try {
-
             Socket client = new Socket("se2-isys.aau.at", 53212);
             DataOutputStream out = new DataOutputStream(client.getOutputStream());
             BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-            out.writeBytes(matNo+'\n');
+            out.writeBytes(matNo + '\n');
 
             result = in.readLine();
 
@@ -33,7 +32,4 @@ public class NetworkThread extends Thread{
             result = "An error occured";
         }
     }
-
-
-
 }

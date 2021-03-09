@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import java.util.Arrays;
 
+//Peter Söllnbauer, 11904589
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -35,27 +37,14 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void showSorted() {
-        TextView result = findViewById(R.id.textViewresult);
+    private String readInput() {
+
         EditText input = findViewById(R.id.editTextMatNo);
         String matNo = input.getText().toString();
-
-        String withoutPrime = removePrimeNums(matNo);
-        String sorted = sort(withoutPrime);
-
-        result.setText(sorted);
-
+        return matNo;
     }
 
-    private String sort(String withoutPrime) {
-
-        char tempArray[] = withoutPrime.toCharArray();
-        Arrays.sort(tempArray);
-        return new String(tempArray);
-    }
-
-    public static String
-    removePrimeNums(String matNo) {
+    public static String removePrimeNums(String matNo) {
         StringBuilder sb = new StringBuilder(matNo);
 
         for (int i = 0; i < sb.length(); i++) {
@@ -66,10 +55,27 @@ public class MainActivity extends AppCompatActivity {
         return sb.toString();
     }
 
-    public void startThread() {
+    private String sort(String withoutPrime) {
+
+        char tempArray[] = withoutPrime.toCharArray();
+        Arrays.sort(tempArray);
+        return new String(tempArray);
+    }
+
+    private void showSorted() {
+        String matNo = readInput();
+        String withoutPrime = removePrimeNums(matNo);
+        String sorted = sort(withoutPrime);
+
         TextView result = findViewById(R.id.textViewresult);
-        EditText input = findViewById(R.id.editTextMatNo);
-        String matNo = input.getText().toString();
+        result.setText(sorted);
+
+    }
+
+
+    public void startThread() {
+        String matNo = readInput();
+        TextView result = findViewById(R.id.textViewresult);
 
         NetworkThread n = new NetworkThread(matNo);
         n.start();
@@ -81,6 +87,5 @@ public class MainActivity extends AppCompatActivity {
         }
 
         result.setText(n.result);
-
     }
 }
