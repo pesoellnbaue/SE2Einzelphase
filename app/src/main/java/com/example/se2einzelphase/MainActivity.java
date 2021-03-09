@@ -8,11 +8,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.InputStreamReader;
-import java.net.Socket;
-import java.nio.Buffer;
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
@@ -26,9 +21,49 @@ public class MainActivity extends AppCompatActivity {
         send.setOnClickListener(new View.OnClickListener() {
 
             @Override
-            public void onClick(View v) { startThread();
+            public void onClick(View v) {
+                startThread();
             }
         });
+
+        Button calculate = (Button) findViewById(R.id.buttonCalculate);
+        calculate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showSorted();
+            }
+        });
+    }
+
+    private void showSorted() {
+        TextView result = findViewById(R.id.textViewresult);
+        EditText input = findViewById(R.id.editTextMatNo);
+        String matNo = input.getText().toString();
+
+        String withoutPrime = removePrimeNums(matNo);
+        String sorted = sort(withoutPrime);
+
+        result.setText(sorted);
+
+    }
+
+    private String sort(String withoutPrime) {
+
+        char tempArray[] = withoutPrime.toCharArray();
+        Arrays.sort(tempArray);
+        return new String(tempArray);
+    }
+
+    public static String
+    removePrimeNums(String matNo) {
+        StringBuilder sb = new StringBuilder(matNo);
+
+        for (int i = 0; i < sb.length(); i++) {
+            if (sb.charAt(i) == '2' || sb.charAt(i) == '3' || sb.charAt(i) == '5' || sb.charAt(i) == '7') {
+                sb.deleteCharAt(i);
+            }
+        }
+        return sb.toString();
     }
 
     public void startThread() {
@@ -41,29 +76,11 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             n.join();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             result.setText("An error occured");
         }
 
         result.setText(n.result);
-
-        /*try {
-
-            Socket client = new Socket("se2-isys.aau.at", 53212);
-            DataOutputStream out = new DataOutputStream(client.getOutputStream());
-            BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-            out.writeBytes(matNo);
-
-            result.setText(in.readLine());
-
-            client.close();
-
-        } catch (Exception e) {
-            result.setText(in.readLine());
-        }*/
-
 
     }
 }
